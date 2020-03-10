@@ -6,6 +6,8 @@ services:
 env:
   global:
     - ROLE_NAME="inmotion.wordpress-ultrastack"
+    - ROLE_DIR="/home/travis/build/inmotionhosting/inmotion.wordpress-ultrastack/molecule/default/roles"
+    - GIT_BASE="https://github.com/inmotionhosting"
   matrix:
     - MOLECULE_DISTRO="centos-7"
     - MOLECULE_DISTRO="centos-8"
@@ -17,12 +19,18 @@ env:
 addons:
   apt:
     packages:
+      - git
       - python3-pip
 
 install:
   - pip install ansible docker molecule[docker] testinfra
   - ansible --version
   - molecule --version
+  - git clone $GIT_BASE/inmotion.apache $ROLE_DIR/inmotion.apache
+  - git clone $GIT_BASE/inmotion.mysql $ROLE_DIR/inmotion.apache
+  - git clone $GIT_BASE/inmotion.php-fpm $ROLE_DIR/inmotion.apache
+  - git clone $GIT_BASE/inmotion.nginx-proxy $ROLE_DIR/inmotion.apache
+  - git clone $GIT_BASE/inmotion.redis $ROLE_DIR/inmotion.apache
 
 script:
   - molecule test
