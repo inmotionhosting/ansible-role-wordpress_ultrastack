@@ -1,0 +1,7 @@
+# {{ template_destpath }}
+# {{ ansible_managed }}
+
+# worker MPM: Multi-Processing Module implementing a hybrid
+# multi-threaded multi-process web server
+
+LoadModule mpm_worker_module {{ apache_modules_path }}/mod_mpm_worker.so

@@ -1,0 +1,22 @@
+---
+# handlers file for inmotion.wordpress_ultrastack
+
+- name: restart apache
+  service:
+    name: "{{ apache_daemon }}"
+    state: restarted
+
+- name: restart mysql
+  service:
+    name: "{{ mysql_daemon }}"
+    state: restarted
+
+- name: restart nginx
+  service:
+    name: "{{ nginx_daemon }}"
+    state: restarted
+
+- name: restart php-fpm
+  service:
+    name: "{{ php_fpm_daemon }}"
+    state: restarted

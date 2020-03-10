@@ -1,0 +1,169 @@
+---
+# tasks file for inmotion.wordpress_ultrastack
+
+- name: (WordPress) Include os_family vars
+  include_vars: "{{ target }}.yml"
+  vars:
+    target: "{{ ansible_os_family }}"
+    targets:
+      - Debian
+  when: target in targets
+
+#
+# LetsEncrypt
+#
+
+- name: (LetsEncrypt) Install LetsEncrypt dependent packages
+  package:
+    name: "{{ certbot_packages }}"
+    state: present
+  when:
+    - use_letsencrypt is defined
+    - use_letsencrypt
+    - certbot_packages is defined
+    - certbot_packages | length > 0
+
+- name: (LetsEncrypt) Disable letsencrypt if DNS doesn't match
+  set_fact:
+    use_letsencrypt: false
+  changed_when: dns_ip != host_ip
+  register: dns_check
+  vars:
+    dns_ip: "{{ lookup('dig', site_domain) }}"
+    host_ip: "{{ ansible_default_ipv4.address }}"
+  when:
+    - use_letsencrypt is defined
+    - use_letsencrypt
+    - dns_ip != host_ip
+
+- name: (LetsEncrypt) Use letsencrypt if specified
+  include: "letsencrypt.yml"
+  when:
+    - use_letsencrypt is defined
+    - use_letsencrypt
+    - not dns_check.changed
+
+#
+# Setup
+#
+
+- name: (WordPress) Create the system user group
+  group:
+    name: "{{ system_user }}"
+    state: present
+
+- name: (WordPress) Create the system user account
+  user:
+    name: "{{ system_user }}"
+    group: "{{ system_user }}"
+
+- name: (WordPress) Ensure system user home has execute permissions
+  file:
+    path: "/home/{{ system_user }}"
+    mode: "0711"
+
+#
+# Apache
+#
+
+- name: (WordPress) Include Debian-family tasks
+  include: "{{ target }}.yml"
+  vars:
+    target: "{{ ansible_os_family }}"
+    targets:
+      - Debian
+  when: target in targets
+
+- name: (WordPress) Configure httpd mpm module
+  template:
+    src: etc/httpd/modules.d/00-mpm.conf.j2
+    dest: "{{ apache_modules_path }}/00-mpm.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- name: (WordPress) Create httpd virtual host
+  template:
+    src: etc/httpd/conf.d/site.conf.j2
+    dest: "{{ apache_config_site_path }}/{{ site_domain }}.conf"
+  notify:
+    - restart apache
+
+#
+# PHP
+#
+
+- name: (WordPress) Place site-specific php-fpm config
+  template:
+    src: etc/php-fpm.d/site.conf.j2
+    dest: "{{ php_fpm_config_pool_path }}/{{ site_domain }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart php-fpm
+
+#
+# WordPress
+#
+
+- name: (WordPress) Check for existing WordPress installation
+  stat:
+    path: "{{ wp_system_path }}/wp-config.php"
+  changed_when: not wordpress_installed.stat.exists
+  ignore_errors: true
+  register: wordpress_installed
+
+- name: (WordPress) Install WordPress
+  include: "wordpress.yml"
+  when: wordpress_installed.changed
+
+- name: (WordPress) Ensure WordPress siteurl and homeurl are correct
+  command: >-
+    wp option set {{ item }} "{{ wp_protocol }}{{ site_domain }}"
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: "{{ system_user }}"
+  changed_when: false
+  vars:
+    wp_protocol: >-
+      {{ "https://"
+      if use_letsencrypt is defined
+      and use_letsencrypt
+      else "http://" }}
+  with_items:
+    - siteurl
+    - home
+
+- name: (WordPress) Ensure content matches site protocol scheme
+  command: >-
+    wp search-replace
+
+    "{{ 'http://'
+    if use_letsencrypt is defined
+    and use_letsencrypt
+    else 'https://' }}"
+
+    "{{ 'https://'
+    if use_letsencrypt is defined
+    and use_letsencrypt
+    else 'http://' }}"
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: "{{ system_user }}"
+  changed_when: false
+
+#
+# UltraStack
+#
+
+- name: (UltraStack) Include UltraStack configuration
+  include: "ultrastack.yml"
+  when:
+    - use_ultrastack is defined
+    - use_ultrastack

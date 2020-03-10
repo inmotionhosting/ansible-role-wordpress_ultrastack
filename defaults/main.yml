@@ -1,0 +1,79 @@
+---
+# defaults file for inmotion.wordpress_ultrastack
+
+#
+# WordPress
+#
+
+# The domain to associate with the WordPress installation.
+site_domain: "{{ ansible_fqdn }}"
+
+# Admin account
+site_email: "email@example.com"
+site_user: "example_username"
+site_pass: "example_password"
+
+# The system user that the WordPress site will belong to.
+system_user: "wordpress"
+
+# The name of the folder in the above user's home directory that
+# WordPress will be installed to.
+wp_system_folder: "doc_root"
+wp_system_path: "/home/{{ system_user }}/{{ wp_system_folder }}"
+
+# These variables control the database name, user, and the user's
+# password that WordPress will use in the wp-config.php file.
+#
+# Note that by default 'wp_db_pass' is automatically generated for you
+# though this may be set to your desired password instead should this
+# be preferred.
+wp_db_name: "{{ system_user }}"
+wp_db_user: "{{ system_user }}"
+# wp_db_pass: 'not_secure'
+
+# WordPress plugins to install and activate
+wp_plugins:
+  - block-bad-queries
+  - boldgrid-backup
+  - health-check
+  - heartbeat-control
+  - w3-total-cache
+
+# WordPress theme(s) to install and activate
+wp_themes: []
+
+#
+# Letsencrypt
+#
+
+# The command to run to generate an SSL using certbot
+certbot_create_command: >-
+  {{ certbot_script }} certonly
+  --standalone
+  --noninteractive
+  --agree-tos
+  --email {{ site_email }}
+  -d {{ site_domain }}
+
+certbot_package: certbot
+
+certbot_packages:
+  - bind-utils
+
+certbot_stop_services:
+  - httpd
+  - nginx
+
+#
+# Meta
+#
+
+# Needs clarification
+use_ultrastack: false
+
+# Whether a letsencrypt SSL should be generated.
+use_letsencrypt: false
+
+# Generate a random password.  Used to create a safe password for the
+# WordPress database user via 'wp_db_pass'.
+pass_gen_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"

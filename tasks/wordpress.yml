@@ -1,0 +1,143 @@
+---
+# install-WordPress.yml
+
+- name: (WordPress) Check if wp-cli is installed
+  stat:
+    path: /usr/bin/wp
+  changed_when: false
+  register: wpcli_installed
+
+- name: (WordPress) Install wp-cli if missing
+  get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: /usr/bin/wp
+    mode: a+x
+  when: not wpcli_installed.stat.exists
+
+#
+# MySQL
+#
+
+- name: (WordPress) Set random MySQL password when not defined
+  set_fact:
+    wp_db_pass: "{{ pass_gen_alias }}"
+  when: wp_db_pass is undefined
+
+- name: (WordPress) Create WordPress database
+  mysql_db:
+    login_unix_socket: "{{ mysql_socket_path }}"
+    name: "{{ wp_db_name }}"
+    state: present
+  register: wp_db_setup
+
+- name: (WordPress) Create DB user
+  mysql_user:
+    login_unix_socket: "{{ mysql_socket_path }}"
+    name: "{{ wp_db_user }}"
+    password: "{{ wp_db_pass }}"
+    priv: "{{ wp_db_name }}.*:ALL"
+    state: present
+
+#
+# WordPress
+#
+
+- name: (WordPress) Ensure install directory exists
+  file:
+    path: "{{ wp_system_path }}"
+    state: directory
+    owner: "{{ system_user }}"
+    group: "{{ system_user }}"
+    mode: "0755"
+
+- name: (WordPress) Download WordPress Core
+  command: >-
+    wp core download
+  args:
+    chdir: "{{ wp_system_path }}"
+    creates: "{{ wp_system_path }}/index.php"
+  become: true
+  become_user: "{{ system_user }}"
+
+- name: (WordPress) Create wp-config.php
+  command: >-
+    wp config create
+    --dbname="{{ wp_db_name }}"
+    --dbuser="{{ wp_db_user }}"
+    --dbpass="{{ wp_db_pass }}"
+  args:
+    chdir: "{{ wp_system_path }}"
+    creates: "{{ wp_system_path }}/wp-config.php"
+  become: true
+  become_user: "{{ system_user }}"
+
+- name: (WordPress) Install WordPress core
+  command: >-
+    wp core install
+    --url={{ site_domain }}
+    --title={{ site_domain }}
+    --admin_user={{ site_user }}
+    --admin_password={{ site_pass }}
+    --admin_email={{ site_email }}
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: "{{ system_user }}"
+
+#
+# Plugins
+#
+
+- name: (WordPress) Install plugins
+  command: >-
+    wp plugin install {{ item }} --activate
+  args:
+    chdir: "{{ wp_system_path }}"
+    creates: "{{ wp_system_path }}/wp-content/plugins/{{ item }}"
+  become: true
+  become_user: "{{ system_user }}"
+  when:
+    - wp_plugins is defined
+    - wp_plugins | length > 0
+  with_items: "{{ wp_plugins }}"
+
+- name: (UltraStack) Ensure w3tc-settings directory exists
+  file:
+    path: "{{ wp_system_path }}/wp-content/w3tc-settings"
+    state: directory
+    owner: "{{ system_user }}"
+    group: "{{ system_user }}"
+    mode: "0755"
+  when:
+    - wp_plugins is defined
+    - wp_plugins | length > 0
+    - ("w3-total-cache" in wp_plugins)
+
+- name: (UltraStack) Configure W3 Total Cache
+  template:
+    src: plugins/w3tc-settings.php.j2
+    dest: "{{ wp_system_path }}/wp-content/w3tc-settings/master.php"
+    owner: "{{ system_user }}"
+    group: "{{ system_user }}"
+    mode: "0644"
+  when:
+    - wp_plugins is defined
+    - wp_plugins | length > 0
+    - ("w3-total-cache" in wp_plugins)
+
+#
+# Themes
+#
+
+- name: (WordPress) Install themes
+  command: >-
+    wp theme install {{ item }} --activate
+  args:
+    chdir: "{{ wp_system_path }}"
+    creates: "{{ wp_system_path }}/wp-content/themes/{{ item }}"
+  become: true
+  become_user: "{{ system_user }}"
+  when:
+    - wp_themes is defined
+    - wp_themes | length > 0
+  with_items: "{{ wp_themes }}"

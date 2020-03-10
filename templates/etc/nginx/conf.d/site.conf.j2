@@ -1,0 +1,27 @@
+# {{ template_destpath }}
+# {{ ansible_managed }}
+
+server {
+    listen 80;
+{% if use_letsencrypt %}
+    listen 443 ssl;
+    ssl_certificate     /etc/letsencrypt/live/{{ site_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ site_domain }}/privkey.pem;
+{% endif %}
+
+    server_name {{ site_domain }} www.{{ site_domain }};
+
+{% if use_letsencrypt %}
+    if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+    }
+{% endif %}
+
+    location / {
+{% if use_letsencrypt %}
+        proxy_pass https://localhost:8443;
+{% else %}
+        proxy_pass http://localhost:8080;
+{% endif %}
+    }
+}

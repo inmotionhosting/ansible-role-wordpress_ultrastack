@@ -1,0 +1,35 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: "molecule_inmotion_wordpress_${MOLECULE_DISTRO:-centos-7}"
+    image: "jcmdln/molecule-images:${MOLECULE_DISTRO:-centos-7}"
+    capabilities:
+      - SYS_ADMIN
+    command: ""
+    pre_build_image: true
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+provisioner:
+  name: "ansible"
+  config_options:
+    defaults:
+      callback_whitelist: "profile_tasks, timer"
+      internal_poll_interval: 0.01
+      nocows: 1
+      stdout_callback: "yaml"
+      var_compression_level: 9
+  lint:
+    name: "ansible-lint"
+    options:
+      force-color: true
+  log: true
+
+verifier:
+  name: ansible

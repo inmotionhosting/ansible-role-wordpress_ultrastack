@@ -1,0 +1,36 @@
+---
+#
+# Setup
+#
+
+- name: (UltraStack) Include UltraStack vars
+  include_vars: "ultrastack.yml"
+
+#
+# NGINX
+#
+
+- name: (UltraStack) Include nginx-proxy role
+  include_role:
+    name: inmotion.nginx-proxy
+
+- name: (UltraStack) Configure site-specific NGINX proxy
+  template:
+    src: etc/nginx/conf.d/site.conf.j2
+    dest: /etc/nginx/conf.d/{{ site_domain }}.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart nginx
+
+#
+# Redis
+#
+
+- name: (UltraStack) Include Redis role
+  include_role:
+    name: inmotion.redis
+  when:
+    - use_redis is defined
+    - use_redis

@@ -1,0 +1,31 @@
+---
+language: python
+services:
+  - docker
+
+env:
+  global:
+    - ROLE_NAME="inmotion.wordpress-ultrastack"
+  matrix:
+    - MOLECULE_DISTRO="centos-7"
+    - MOLECULE_DISTRO="centos-8"
+    - MOLECULE_DISTRO="debian-9"
+    - MOLECULE_DISTRO="debian-10"
+    - MOLECULE_DISTRO="ubuntu-16.04"
+    - MOLECULE_DISTRO="ubuntu-18.04"
+
+addons:
+  apt:
+    packages:
+      - python3-pip
+
+install:
+  - pip install ansible docker molecule[docker] testinfra
+  - ansible --version
+  - molecule --version
+
+script:
+  - molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
