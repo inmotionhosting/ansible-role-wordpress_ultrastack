@@ -24,8 +24,10 @@ install:
   - ansible --version
   - molecule --version
 
-script:
-  - molecule test
+jobs:
+  include:
+    - script: molecule test
+    - script: molecule test --scenario-name ultrastack
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
