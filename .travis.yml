@@ -24,12 +24,9 @@ install:
   - ansible --version
   - molecule --version
 
-jobs:
-  include:
-    - stage: WordPress
-      script: molecule test
-    - stage: UltraStack
-      script: molecule test --scenario-name ultrastack
+script:
+  - molecule test
+  - molecule test --scenario-name ultrastack
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
