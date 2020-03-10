@@ -26,11 +26,11 @@ install:
   - pip install ansible docker molecule[docker] testinfra
   - ansible --version
   - molecule --version
-  - ROLE="inmotion.apache" git clone $GIT_BASE/$ROLE $ROLE_DIR/$ROLE
-  - ROLE="inmotion.mysql" git clone $GIT_BASE/$ROLE $ROLE_DIR/$ROLE
-  - ROLE="inmotion.php-fpm" git clone $GIT_BASE/$ROLE $ROLE_DIR/$ROLE
-  - ROLE="inmotion.nginx-proxy" git clone $GIT_BASE/$ROLE $ROLE_DIR/$ROLE
-  - ROLE="inmotion.redis" git clone $GIT_BASE/$ROLE $ROLE_DIR/$ROLE
+  - git clone $GIT_BASE/inmotion.apache $ROLE_DIR/inmotion.apache
+  - git clone $GIT_BASE/inmotion.mysql $ROLE_DIR/inmotion.mysql
+  - git clone $GIT_BASE/inmotion.php-fpm $ROLE_DIR/inmotion.php-fpm
+  - git clone $GIT_BASE/inmotion.nginx-proxy $ROLE_DIR/inmotion.nginx-proxy
+  - git clone $GIT_BASE/inmotion.redis $ROLE_DIR/inmotion.redis
 
 script:
   - molecule test
