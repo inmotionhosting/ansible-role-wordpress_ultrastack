@@ -6,7 +6,7 @@ services:
 env:
   global:
     - ROLE_NAME="inmotion.wordpress-ultrastack"
-    - ROLE_DIR="/home/travis/build/inmotionhosting/inmotion.wordpress-ultrastack/molecule/default/roles"
+    - ROLE_DIR="/home/travis/.ansible/roles"
     - GIT_BASE="https://github.com/inmotionhosting"
   matrix:
     - MOLECULE_DISTRO="centos-7"
