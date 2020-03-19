@@ -5,7 +5,7 @@
     - role: inmotionhosting.apache
     - role: inmotionhosting.php_fpm
     - role: inmotionhosting.mysql
-    - role: inmotionhosting.wordpress-ultrastack
+    - role: inmotionhosting.wordpress_ultrastack
       vars:
         use_letsencrypt: false
         use_ultrastack: true
