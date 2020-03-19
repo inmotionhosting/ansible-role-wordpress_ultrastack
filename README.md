@@ -1,9 +1,9 @@
-inmotion.wordpress-ultrastack
+inmotionhosting.wordpress_ultrastack
 =========
 
 Modular Ansible Role for deploying and configuring WordPress, including InMotion's optimized UltraStack
 
-[![Build Status](https://travis-ci.org/inmotionhosting/inmotion.wordpress-ultrastack.png?branch=master)](https://travis-ci.org/inmotionhosting/inmotion.wordpress-ultrastack)
+[![Build Status](https://travis-ci.org/inmotionhosting/inmotionhosting.wordpress_ultrastack.png?branch=master)](https://travis-ci.org/inmotionhosting/inmotionhosting.wordpress_ultrastack)
 
 Requirements
 ------------
@@ -41,19 +41,35 @@ Variables in `defaults/main.yml`
 Dependencies
 ------------
 
-    - role: inmotion.apache
-    - role: inmotion.mysql
-    - role: inmotion.php-fpm
+### Required
+
+    - role: inmotionhosting.apache
+    - role: inmotionhosting.mysql
+    - role: inmotionhosting.php_fpm
+
+### Optional
+
+    - role: inmotionhosting.nginx_proxy
+    - role: inmotionhosting.redis
 
 Example Playbook
 ----------------
 
-    - hosts: www
+    - hosts: wordpress_lamp
       roles:
-         - role: inmotion.apache
-         - role: inmotion.mysql
-         - role: inmotion.php-fpm
-         - role: inmotion.wordpress-ultrastack
+        - role: inmotionhosting.apache
+        - role: inmotionhosting.mysql
+        - role: inmotionhosting.php_fpm
+        - role: inmotionhosting.wordpress-ultrastack
+          vars:
+            use_ultrastack: false
+
+    - hosts: wordpress_ultrastack
+      roles:
+        - role: inmotionhosting.apache
+        - role: inmotionhosting.mysql
+        - role: inmotionhosting.php_fpm
+        - role: inmotionhosting.wordpress-ultrastack
 
 License
 -------

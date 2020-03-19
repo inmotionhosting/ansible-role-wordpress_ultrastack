@@ -3,7 +3,7 @@
   hosts: all
   roles:
     - role: inmotionhosting.apache
-    - role: inmotionhosting.php-fpm
+    - role: inmotionhosting.php_fpm
     - role: inmotionhosting.mysql
     - role: inmotionhosting.wordpress-ultrastack
       vars:
