@@ -22,4 +22,9 @@ galaxy_info:
 
   galaxy_tags: []
 
-dependencies: []
+dependencies:
+  - role: inmotionhosting.apache
+  - role: inmotionhosting.mysql
+  - role: inmotionhosting.php-fpm
+  - role: inmotionhosting.nginx-proxy
+  - role: inmotionhosting.redis
