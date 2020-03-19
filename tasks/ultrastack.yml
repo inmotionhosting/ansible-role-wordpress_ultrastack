@@ -12,7 +12,7 @@
 
 - name: (UltraStack) Include nginx-proxy role
   include_role:
-    name: inmotionhosting.nginx-proxy
+    name: inmotionhosting.nginx_proxy
 
 - name: (UltraStack) Configure site-specific NGINX proxy
   template:
