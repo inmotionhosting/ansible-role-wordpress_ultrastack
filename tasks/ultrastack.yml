@@ -12,7 +12,7 @@
 
 - name: (UltraStack) Include nginx-proxy role
   include_role:
-    name: inmotion.nginx-proxy
+    name: inmotionhosting.nginx-proxy
 
 - name: (UltraStack) Configure site-specific NGINX proxy
   template:
@@ -30,7 +30,7 @@
 
 - name: (UltraStack) Include Redis role
   include_role:
-    name: inmotion.redis
+    name: inmotionhosting.redis
   when:
     - use_redis is defined
     - use_redis
