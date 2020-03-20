@@ -23,10 +23,13 @@ addons:
       - python3-pip
 
 install:
-  - pip install ansible docker molecule[docker] testinfra
-  - ansible --version
-  - molecule --version
+  - pip install ansible ansible-lint docker molecule[docker] testinfra yamllint
   - ansible-galaxy install inmotionhosting.{apache,mysql,php_fpm,nginx_proxy,redis} -p $ROLE_DIR
+
+before_script:
+  - cd ../
+  - mv ansible-role-$ROLE_NAME inmotionhosting.$ROLE_NAME
+  - cd inmotionhosting.$ROLE_NAME
 
 script:
   - molecule test

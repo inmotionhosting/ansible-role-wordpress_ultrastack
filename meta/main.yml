@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: wordpress_ultrastack
   author: inmotionhosting
   description: Install and configure WordPress
   company: "InMotion Hosting"
@@ -23,6 +24,7 @@ galaxy_info:
   galaxy_tags:
     - web
     - wordpress
+    - WordPress
 
 dependencies:
   - role: inmotionhosting.apache
