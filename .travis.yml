@@ -8,6 +8,9 @@ addons:
       - python3-pip
 
 env:
+  global:
+    - GIT_BASE="https://github.com/inmotionhosting"
+    - ROLE_DIR="/home/travis/.ansible/roles"
   matrix:
     - MOLECULE_DISTRO="centos-7"
     - MOLECULE_DISTRO="centos-8"
@@ -19,6 +22,11 @@ env:
 
 install:
   - pip install -r requirements.txt
+  - git clone $GIT_BASE/ansible-role-apache $ROLE_DIR/
+  - git clone $GIT_BASE/ansible-role-mysql $ROLE_DIR/
+  - git clone $GIT_BASE/ansible-role-php-fpm $ROLE_DIR/
+  - git clone $GIT_BASE/ansible-role-nginx-proxy $ROLE_DIR/
+  - git clone $GIT_BASE/ansible-role-redis $ROLE_DIR/
 
 script:
   - molecule test --destroy never
