@@ -9,7 +9,7 @@ Requirements
 ------------
 
 * CentOS 7.x or later
-* Debian 9 or later
+* Debian 8 or later
 * Ubuntu 16.04 LTS or later
 
 Role Variables
@@ -43,33 +43,42 @@ Dependencies
 
 ### Required
 
-    - role: inmotionhosting.apache
-    - role: inmotionhosting.mysql
-    - role: inmotionhosting.php_fpm
+```yaml
+- role: inmotionhosting.apache
+- role: inmotionhosting.mysql
+- role: inmotionhosting.php_fpm
+```
 
 ### Optional
+These roles are required when `use_ultrastack: true`:
 
-    - role: inmotionhosting.nginx_proxy
-    - role: inmotionhosting.redis
+```yaml
+- role: inmotionhosting.nginx_proxy
+- role: inmotionhosting.redis
+```
 
 Example Playbook
 ----------------
 
-    - hosts: wordpress_lamp
-      roles:
-        - role: inmotionhosting.apache
-        - role: inmotionhosting.mysql
-        - role: inmotionhosting.php_fpm
-        - role: inmotionhosting.wordpress_ultrastack
-          vars:
-            use_ultrastack: false
+```yaml
+- hosts: wordpress_lamp
+  roles:
+    - role: inmotionhosting.apache
+    - role: inmotionhosting.mysql
+    - role: inmotionhosting.php_fpm
+    - role: inmotionhosting.wordpress_ultrastack
 
-    - hosts: wordpress_ultrastack
-      roles:
-        - role: inmotionhosting.apache
-        - role: inmotionhosting.mysql
-        - role: inmotionhosting.php_fpm
-        - role: inmotionhosting.wordpress_ultrastack
+- hosts: wordpress_ultrastack
+  roles:
+    - role: inmotionhosting.apache
+    - role: inmotionhosting.mysql
+    - role: inmotionhosting.php_fpm
+    # nginx_proxy and redis are included conditionally from within the
+    # wordpress_ultrastack role
+    - role: inmotionhosting.wordpress_ultrastack
+      vars:
+        use_ultrastack: true
+```
 
 License
 -------
@@ -79,4 +88,4 @@ GPLv3
 Author Information
 ------------------
 
-InMotion Hosting
+[InMotion Hosting](https://inmotionhosting.com)

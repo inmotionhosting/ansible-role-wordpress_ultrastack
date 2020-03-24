@@ -1,38 +1,27 @@
 ---
 language: python
-services:
-  - docker
+services: docker
+
+addons:
+  apt:
+    packages:
+      - python3-pip
 
 env:
-  global:
-    - ROLE_NAME="wordpress_ultrastack"
-    - ROLE_DIR="/home/travis/.ansible/roles"
-    - GIT_BASE="https://github.com/inmotionhosting"
   matrix:
     - MOLECULE_DISTRO="centos-7"
     - MOLECULE_DISTRO="centos-8"
+    - MOLECULE_DISTRO="debian-8"
     - MOLECULE_DISTRO="debian-9"
     - MOLECULE_DISTRO="debian-10"
     - MOLECULE_DISTRO="ubuntu-16.04"
     - MOLECULE_DISTRO="ubuntu-18.04"
 
-addons:
-  apt:
-    packages:
-      - git
-      - python3-pip
-
 install:
-  - pip install ansible ansible-lint docker molecule[docker] testinfra yamllint
-  - ansible-galaxy install inmotionhosting.{apache,mysql,php_fpm,nginx_proxy,redis} -p $ROLE_DIR
-
-before_script:
-  - cd ../
-  - mv ansible-role-$ROLE_NAME inmotionhosting.$ROLE_NAME
-  - cd inmotionhosting.$ROLE_NAME
+  - pip install -r requirements.txt
 
 script:
-  - molecule test
+  - molecule test --destroy never
   - molecule test --scenario-name ultrastack
 
 notifications:

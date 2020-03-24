@@ -7,9 +7,7 @@ driver:
 
 platforms:
   - name: "molecule_wordpress_ultrastack_${MOLECULE_DISTRO:-centos-7}"
-    image: "jcmdln/molecule-images:${MOLECULE_DISTRO:-centos-7}"
-    capabilities:
-      - SYS_ADMIN
+    image: "inmotionhosting/molecule-images:${MOLECULE_DISTRO:-centos-7}"
     command: ""
     pre_build_image: true
     privileged: true

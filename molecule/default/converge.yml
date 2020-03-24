@@ -2,10 +2,7 @@
 - name: Converge
   hosts: all
   roles:
-    - role: inmotionhosting.apache
-    - role: inmotionhosting.php_fpm
-    - role: inmotionhosting.mysql
-    - role: inmotionhosting.wordpress_ultrastack
-      vars:
-        use_letsencrypt: false
-        use_ultrastack: false
+    - role: ansible-role-apache
+    - role: ansible-role-mysql
+    - role: ansible-role-php_fpm
+    - role: ansible-role-wordpress_ultrastack
