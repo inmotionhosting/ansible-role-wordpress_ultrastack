@@ -34,7 +34,7 @@ Variables in `defaults/main.yml`
 | wp_db_name | The name of the database to associate with this WordPress installation.
 | wp_db_user | The name of the database user account to associate with this WordPress installation.
 | wp_db_pass | (Optional) The password to associate with the `wp_db_user`.  If not defined, the password will be automatically generated via `pass_gen_alias`.
-| wp_plugins | The list of WordPress plugins to install.
+| wp_plugins | The list of WordPress plugins to install.  Note that plugins are only installed in fresh deployments of WordPress; changing this list and redeploying will not add/remove plugins fron an existing installation of WordPress.
 | wp_system_folder | The name of the folder WordPress should be installed to within the `system_user`'s home directory.
 | wp_system_path | The full path to the `system_user`'s `wp_system_folder`.
 
