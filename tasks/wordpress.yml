@@ -74,11 +74,11 @@
 - name: (WordPress) Install WordPress core
   command: >-
     wp core install
-    --url={{ site_domain }}
-    --title={{ site_domain }}
-    --admin_user={{ site_user }}
-    --admin_password={{ site_pass }}
-    --admin_email={{ site_email }}
+    --url="{{ site_domain }}"
+    --title="{{ site_domain }}"
+    --admin_user="{{ site_user }}"
+    --admin_password="{{ site_pass }}"
+    --admin_email="{{ site_email }}"
   args:
     chdir: "{{ wp_system_path }}"
   become: true
