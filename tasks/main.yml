@@ -127,6 +127,7 @@
   become: true
   become_user: wordpress
   register: siteurl
+  changed_when: false
   args:
     chdir: "{{ wp_system_path }}"
 
@@ -136,8 +137,8 @@
   become: true
   become_user: wordpress
   args:
-    chdir: {{ wp_system_path }}
-  when: siteurl.stdout is defined and siteurl.stdout != "{{ wp_protocol }}{{ site_domain }}"
+    chdir: "{{ wp_system_path }}"
+  when: siteurl.stdout is defined and siteurl.stdout != wp_protocol + site_domain
   vars:
     wp_protocol: >-
       {{ "https://"
