@@ -132,7 +132,7 @@
 
 - name: (WordPress) Replace all site urls in database if changed
   command: >-
-    wp search-replace "{{ siteurl.stdout }}" "{{ wp_protocol }}{{ site_domain }}"
+    wp search-replace "{{ siteurl.stdout }}" "{{ wp_protocol }}{{ site_domain }}" --skip-columns=guid
   become: true
   become_user: wordpress
   args:
