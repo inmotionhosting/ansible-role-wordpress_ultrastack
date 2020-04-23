@@ -121,6 +121,30 @@
   include: "wordpress.yml"
   when: wordpress_installed.changed
 
+- name: (WordPress) Get WordPress Site Url
+  command: >-
+    wp option get siteurl
+  become: true
+  become_user: wordpress
+  register: siteurl
+  args:
+    chdir: "{{ wp_system_path }}"
+
+- name: (WordPress) Replace all site urls in database if changed
+  command: >-
+    wp search-replace "{{ siteurl.stdout }}" "{{ wp_protocol }}{{ site_domain }}"
+  become: true
+  become_user: wordpress
+  args:
+    chdir: {{ wp_system_path }}
+  when: siteurl.stdout is defined and siteurl.stdout != "{{ wp_protocol }}{{ site_domain }}"
+  vars:
+    wp_protocol: >-
+      {{ "https://"
+      if use_letsencrypt is defined
+      and use_letsencrypt
+      else "http://" }}
+
 - name: (WordPress) Ensure WordPress siteurl and homeurl are correct
   command: >-
     wp option set {{ item }} "{{ wp_protocol }}{{ site_domain }}"
