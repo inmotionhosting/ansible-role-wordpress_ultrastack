@@ -2,18 +2,17 @@
 # tasks file for inmotion.wordpress_ultrastack
 
 - name: (WordPress) Include os_family vars
-  include_vars: "{{ target }}.yml"
+  include_vars: "{{ ansible_os_family }}.yml"
   vars:
-    target: "{{ ansible_os_family }}"
     targets:
       - Debian
-  when: target in targets
+  when: ansible_os_family in targets
 
 #
 # LetsEncrypt
 #
 
-- name: (LetsEncrypt) Install LetsEncrypt dependent packages
+- name: (LetsEncrypt) Install Let's Encrypt dependent packages
   package:
     name: "{{ certbot_packages }}"
     state: present
@@ -23,7 +22,7 @@
     - certbot_packages is defined
     - certbot_packages | length > 0
 
-- name: (LetsEncrypt) Disable letsencrypt if DNS doesn't match
+- name: (LetsEncrypt) Disable Let's Encrypt if DNS doesn't match
   set_fact:
     use_letsencrypt: false
   changed_when: dns_ip != host_ip
@@ -36,7 +35,7 @@
     - use_letsencrypt
     - dns_ip != host_ip
 
-- name: (LetsEncrypt) Use letsencrypt if specified
+- name: (LetsEncrypt) Use Let's Encrypt if specified
   include: "letsencrypt.yml"
   when:
     - use_letsencrypt is defined
@@ -67,12 +66,11 @@
 #
 
 - name: (WordPress) Include Debian-family tasks
-  include: "{{ target }}.yml"
+  include: "{{ ansible_os_family }}.yml"
   vars:
-    target: "{{ ansible_os_family }}"
     targets:
       - Debian
-  when: target in targets
+  when: ansible_os_family in targets
 
 - name: (WordPress) Configure httpd mpm module
   template:
@@ -124,20 +122,20 @@
 - name: (WordPress) Get WordPress Site Url
   command: >-
     wp option get siteurl
+  args:
+    chdir: "{{ wp_system_path }}"
   become: true
   become_user: wordpress
   register: siteurl
   changed_when: false
-  args:
-    chdir: "{{ wp_system_path }}"
 
 - name: (WordPress) Replace all site urls in database if changed
   command: >-
     wp search-replace "{{ siteurl.stdout }}" "{{ wp_protocol }}{{ site_domain }}" --skip-columns=guid
-  become: true
-  become_user: wordpress
   args:
     chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: wordpress
   when: siteurl.stdout is defined and siteurl.stdout != wp_protocol + site_domain
   vars:
     wp_protocol: >-
