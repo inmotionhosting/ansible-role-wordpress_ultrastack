@@ -40,7 +40,6 @@ wp_plugins:
   - w3-total-cache
 
 # W3 Total Cache settings to configure
----
 wp_w3tc_settings:
   - setting: pgcache.cache.feed
     type: boolean
@@ -105,9 +104,6 @@ wp_w3tc_settings:
   - setting: dbcache.engine
     type: string
     value: redis
-  - setting: dbcache.redis.password
-    type: string
-    value: ""
   - setting: dbcache.redis.servers
     type: array
     value: "127.0.0.1:6379"
@@ -156,9 +152,6 @@ wp_w3tc_settings:
   - setting: objectcache.engine
     type: string
     value: redis
-  - setting: objectcache.redis.password
-    type: string
-    value: ""
   - setting: objectcache.redis.servers
     type: array
     value: "127.0.0.1:6379"
