@@ -39,6 +39,117 @@ wp_plugins:
   - heartbeat-control
   - w3-total-cache
 
+# W3 Total Cache settings to configure
+wp_w3tc_settings:
+  - setting: pgcache.cache.feed
+    type: boolean
+    value: "true"
+  - setting: pgcache.enabled
+    type: boolean
+    value: "true"
+  - setting: pgcache.engine
+    type: string
+    value: file
+  - setting: browsercache.cssjs.cache.control
+    type: boolean
+    value: "true"
+  - setting: browsercache.cssjs.compression
+    type: boolean
+    value: "true"
+  - setting: browsercache.cssjs.etag
+    type: boolean
+    value: "true"
+  - setting: browsercache.cssjs.expires
+    type: boolean
+    value: "true"
+  - setting: browsercache.cssjs.last_modified
+    type: boolean
+    value: "true"
+  - setting: browsercache.enabled
+    type: boolean
+    value: "true"
+  - setting: browsercache.html.cache.control
+    type: boolean
+    value: "true"
+  - setting: browsercache.html.compression
+    type: boolean
+    value: "true"
+  - setting: browsercache.html.etag
+    type: boolean
+    value: "true"
+  - setting: browsercache.html.expires
+    type: boolean
+    value: "true"
+  - setting: browsercache.html.last_modified
+    type: boolean
+    value: "true"
+  - setting: browsercache.other.cache.control
+    type: boolean
+    value: "true"
+  - setting: browsercache.other.compression
+    type: boolean
+    value: "true"
+  - setting: browsercache.other.etag
+    type: boolean
+    value: "true"
+  - setting: browsercache.other.expires
+    type: boolean
+    value: "true"
+  - setting: browsercache.other.last_modified
+    type: boolean
+    value: "true"
+  - setting: dbcache.enabled
+    type: boolean
+    value: "true"
+  - setting: dbcache.engine
+    type: string
+    value: file
+  - setting: lazyload.enabled
+    type: boolean
+    value: "true"
+  - setting: minify.auto
+    type: boolean
+    value: "true"
+  - setting: minify.css.enable
+    type: boolean
+    value: "true"
+  - setting: minify.css.engine
+    type: string
+    value: css
+  - setting: minify.css.strip.comments
+    type: boolean
+    value: "true"
+  - setting: minify.css.strip.crlf
+    type: boolean
+    value: "true"
+  - setting: minify.enabled
+    type: boolean
+    value: "true"
+  - setting: minify.error.notification
+    type: string
+    value: admin
+  - setting: minify.html.enable
+    type: boolean
+    value: "true"
+  - setting: minify.html.engine
+    type: string
+    value: html
+  - setting: minify.html.strip.crlf
+    type: boolean
+    value: "true"
+  - setting: minify.js.enable
+    type: boolean
+    value: "true"
+  - setting: minify.js.engine
+    type: string
+    value: js
+  - setting: objectcache.enabled
+    type: boolean
+    value: "true"
+  - setting: objectcache.engine
+    type: string
+    value: file
+
 # WordPress theme(s) to install and activate
 wp_themes: []
 

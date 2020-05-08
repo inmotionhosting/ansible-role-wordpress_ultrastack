@@ -1,2 +1,16 @@
 ---
 use_redis: true
+
+wp_w3tc_settings:
+  - setting: dbcache.engine
+    type: string
+    value: redis
+  - setting: dbcache.redis.servers
+    type: array
+    value: "127.0.0.1:6379"
+  - setting: objectcache.engine
+    type: string
+    value: redis
+  - setting: objectcache.redis.servers
+    type: array
+    value: "127.0.0.1:6379"

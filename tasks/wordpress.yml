@@ -101,29 +101,19 @@
     - wp_plugins | length > 0
   with_items: "{{ wp_plugins }}"
 
-- name: (UltraStack) Ensure w3tc-settings directory exists
-  file:
-    path: "{{ wp_system_path }}/wp-content/w3tc-settings"
-    state: directory
-    owner: "{{ system_user }}"
-    group: "{{ system_user }}"
-    mode: "0755"
+- name: (WordPress) Configure W3 Total Cache
+  command: >-
+    wp w3-total-cache option set
+    {{ item.setting }} {{ item.value }} --type={{ item.type }}
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: "{{ system_user }}"
   when:
     - wp_plugins is defined
     - wp_plugins | length > 0
     - ("w3-total-cache" in wp_plugins)
-
-- name: (UltraStack) Configure W3 Total Cache
-  template:
-    src: plugins/w3tc-settings.php.j2
-    dest: "{{ wp_system_path }}/wp-content/w3tc-settings/master.php"
-    owner: "{{ system_user }}"
-    group: "{{ system_user }}"
-    mode: "0644"
-  when:
-    - wp_plugins is defined
-    - wp_plugins | length > 0
-    - ("w3-total-cache" in wp_plugins)
+  with_items: "{{ wp_w3tc_settings }}"
 
 #
 # Themes

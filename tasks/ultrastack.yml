@@ -34,3 +34,36 @@
   when:
     - use_redis is defined
     - use_redis
+
+#
+# Plugins
+#
+
+# Confirming if W3TC is already configured to use Redis caching
+- name: (WordPress) Get W3TC settings
+  command: >-
+    wp w3-total-cache option get dbcache.engine
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: wordpress
+  register: dbcache
+  changed_when: dbcache.stdout != "redis"
+  when:
+    - wp_plugins is defined
+    - wp_plugins | length > 0
+    - ("w3-total-cache" in wp_plugins)
+    - use_redis is defined
+    - use_redis
+
+- name: (UltraStack) Configure W3TC for Redis
+  command: >-
+    wp w3-total-cache option set
+    {{ item.setting }} {{ item.value }} --type={{ item.type }}
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: "{{ system_user }}"
+  when:
+    - dbcache.changed
+  with_items: "{{ wp_w3tc_settings }}"
