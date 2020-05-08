@@ -31,6 +31,7 @@
 - name: (UltraStack) Include Redis role
   include_role:
     name: inmotionhosting.redis
+    public: true
   when:
     - use_redis is defined
     - use_redis
@@ -51,5 +52,5 @@
     - wp_plugins is defined
     - wp_plugins | length > 0
     - ("w3-total-cache" in wp_plugins)
-    - redis_installed_version.changed
+    - redis_installed_version is defined
   with_items: "{{ wp_w3tc_settings }}"
