@@ -34,3 +34,21 @@
   when:
     - use_redis is defined
     - use_redis
+
+#
+# Plugins
+#
+
+- name: (UltraStack) Configure W3 Total Cache
+  command: >-
+    wp w3-total-cache option set
+    {{ item.setting }} {{ item.value }} --type={{ item.type }}
+  args:
+    chdir: "{{ wp_system_path }}"
+  become: true
+  become_user: "{{ system_user }}"
+  when:
+    - wp_plugins is defined
+    - wp_plugins | length > 0
+    - ("w3-total-cache" in wp_plugins)
+  with_items: "{{ wp_w3tc_us_settings }}"

@@ -101,7 +101,7 @@
     - wp_plugins | length > 0
   with_items: "{{ wp_plugins }}"
 
-- name: (UltraStack) Configure W3 Total Cache
+- name: (WordPress) Configure W3 Total Cache
   command: >-
     wp w3-total-cache option set
     {{ item.setting }} {{ item.value }} --type={{ item.type }}
