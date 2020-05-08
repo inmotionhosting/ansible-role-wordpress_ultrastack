@@ -1,7 +1,7 @@
 ---
 use_redis: true
 
-wp_w3tc_us_settings:
+wp_w3tc_settings:
   - setting: dbcache.engine
     type: string
     value: redis

@@ -39,7 +39,7 @@
 # Plugins
 #
 
-- name: (UltraStack) Configure W3 Total Cache
+- name: (UltraStack) Configure W3TC for Redis
   command: >-
     wp w3-total-cache option set
     {{ item.setting }} {{ item.value }} --type={{ item.type }}
@@ -51,4 +51,5 @@
     - wp_plugins is defined
     - wp_plugins | length > 0
     - ("w3-total-cache" in wp_plugins)
-  with_items: "{{ wp_w3tc_us_settings }}"
+    - redis_installed_version.changed
+  with_items: "{{ wp_w3tc_settings }}"
