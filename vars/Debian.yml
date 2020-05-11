@@ -1,7 +1,0 @@
----
-certbot_packages:
-  - dnsutils
-
-certbot_stop_services:
-  - apache2
-  - nginx

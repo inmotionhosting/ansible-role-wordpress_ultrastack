@@ -1,47 +1,6 @@
 ---
 # tasks file for inmotion.wordpress_ultrastack
 
-- name: (WordPress) Include os_family vars
-  include_vars: "{{ ansible_os_family }}.yml"
-  vars:
-    targets:
-      - Debian
-  when: ansible_os_family in targets
-
-#
-# LetsEncrypt
-#
-
-- name: (LetsEncrypt) Install Let's Encrypt dependent packages
-  package:
-    name: "{{ certbot_packages }}"
-    state: present
-  when:
-    - use_letsencrypt is defined
-    - use_letsencrypt
-    - certbot_packages is defined
-    - certbot_packages | length > 0
-
-- name: (LetsEncrypt) Disable Let's Encrypt if DNS doesn't match
-  set_fact:
-    use_letsencrypt: false
-  changed_when: dns_ip != host_ip
-  register: dns_check
-  vars:
-    dns_ip: "{{ lookup('dig', site_domain) }}"
-    host_ip: "{{ ansible_default_ipv4.address }}"
-  when:
-    - use_letsencrypt is defined
-    - use_letsencrypt
-    - dns_ip != host_ip
-
-- name: (LetsEncrypt) Use Let's Encrypt if specified
-  include: "letsencrypt.yml"
-  when:
-    - use_letsencrypt is defined
-    - use_letsencrypt
-    - not dns_check.changed
-
 #
 # Setup
 #
