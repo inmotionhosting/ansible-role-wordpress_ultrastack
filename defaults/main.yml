@@ -154,28 +154,6 @@ wp_w3tc_settings:
 wp_themes: []
 
 #
-# Letsencrypt
-#
-
-# The command to run to generate an SSL using certbot
-certbot_create_command: >-
-  {{ certbot_script }} certonly
-  --standalone
-  --noninteractive
-  --agree-tos
-  --email {{ site_email }}
-  -d {{ site_domain }}
-
-certbot_package: certbot
-
-certbot_packages:
-  - bind-utils
-
-certbot_stop_services:
-  - httpd
-  - nginx
-
-#
 # Meta
 #
 
