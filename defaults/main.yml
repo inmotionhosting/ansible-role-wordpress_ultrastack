@@ -107,42 +107,6 @@ wp_w3tc_settings:
   - setting: lazyload.enabled
     type: boolean
     value: "true"
-  - setting: minify.auto
-    type: boolean
-    value: "true"
-  - setting: minify.css.enable
-    type: boolean
-    value: "true"
-  - setting: minify.css.engine
-    type: string
-    value: css
-  - setting: minify.css.strip.comments
-    type: boolean
-    value: "true"
-  - setting: minify.css.strip.crlf
-    type: boolean
-    value: "true"
-  - setting: minify.enabled
-    type: boolean
-    value: "true"
-  - setting: minify.error.notification
-    type: string
-    value: admin
-  - setting: minify.html.enable
-    type: boolean
-    value: "true"
-  - setting: minify.html.engine
-    type: string
-    value: html
-  - setting: minify.html.strip.crlf
-    type: boolean
-    value: "true"
-  - setting: minify.js.enable
-    type: boolean
-    value: "true"
-  - setting: minify.js.engine
-    type: string
-    value: js
   - setting: objectcache.enabled
     type: boolean
     value: "true"
@@ -152,28 +116,6 @@ wp_w3tc_settings:
 
 # WordPress theme(s) to install and activate
 wp_themes: []
-
-#
-# Letsencrypt
-#
-
-# The command to run to generate an SSL using certbot
-certbot_create_command: >-
-  {{ certbot_script }} certonly
-  --standalone
-  --noninteractive
-  --agree-tos
-  --email {{ site_email }}
-  -d {{ site_domain }}
-
-certbot_package: certbot
-
-certbot_packages:
-  - bind-utils
-
-certbot_stop_services:
-  - httpd
-  - nginx
 
 #
 # Meta
