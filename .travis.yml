@@ -18,12 +18,14 @@ env:
     - MOLECULE_DISTRO="debian-10"
     - MOLECULE_DISTRO="ubuntu-16.04"
     - MOLECULE_DISTRO="ubuntu-18.04"
+    - MOLECULE_DISTRO="ubuntu-20.04"
 
 install:
   - pip install -r requirements.txt
   - git clone $GIT_BASE/ansible-role-apache $ROLE_DIR/ansible-role-apache
   - git clone $GIT_BASE/ansible-role-mysql $ROLE_DIR/ansible-role-mysql
   - git clone $GIT_BASE/ansible-role-php_fpm $ROLE_DIR/ansible-role-php_fpm
+  - git clone $GIT_BASE/ansible-role-letsencrypt $ROLE_DIR/ansible-role-letsencrypt
   - git clone $GIT_BASE/ansible-role-nginx_proxy $ROLE_DIR/inmotionhosting.nginx_proxy
   - git clone $GIT_BASE/ansible-role-redis $ROLE_DIR/inmotionhosting.redis
 
