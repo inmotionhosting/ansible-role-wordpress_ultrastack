@@ -84,7 +84,7 @@
   args:
     chdir: "{{ wp_system_path }}"
   become: true
-  become_user: wordpress
+  become_user: "{{ system_user }}"
   register: siteurl
   changed_when: false
 
@@ -94,7 +94,7 @@
   args:
     chdir: "{{ wp_system_path }}"
   become: true
-  become_user: wordpress
+  become_user: "{{ system_user }}"
   when: siteurl.stdout is defined and siteurl.stdout != wp_protocol + site_domain
   vars:
     wp_protocol: >-
