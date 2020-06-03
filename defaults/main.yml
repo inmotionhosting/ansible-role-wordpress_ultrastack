@@ -121,7 +121,7 @@ wp_themes: []
 # Meta
 #
 
-# Needs clarification
+# Whether Nginx and Redis should be installed.
 use_ultrastack: false
 
 # Whether a letsencrypt SSL should be generated.
@@ -130,3 +130,14 @@ use_letsencrypt: false
 # Generate a random password.  Used to create a safe password for the
 # WordPress database user via 'wp_db_pass'.
 pass_gen_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+
+#
+# Nginx Rate Limiting
+#
+
+nginx_ratelimit_enable: true
+nginx_ratelimit: 1
+nginx_ratelimit_burst: 10
+nginx_ratelimit_nodelay: true
+nginx_ratelimit_zone: "default_rlzone"
+nginx_ratelimit_paths: ".*login\\.php|xmlrpc\\.php|wp-cron\\.php"

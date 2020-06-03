@@ -24,4 +24,17 @@ server {
         proxy_pass http://localhost:8080;
 {% endif %}
     }
+
+{% if nginx_ratelimit_enable %}
+    location ~ {{ nginx_ratelimit_paths }} {
+        limit_req zone={{ nginx_ratelimit_zone }} burst={{ nginx_ratelimit_burst }}{% if nginx_ratelimit_nodelay %} nodelay{% endif %};
+
+{% if use_letsencrypt %}
+        proxy_pass https://localhost:8443;
+{% else %}
+        proxy_pass http://localhost:8080;
+{% endif %}
+    }
+{% endif %}
+
 }
