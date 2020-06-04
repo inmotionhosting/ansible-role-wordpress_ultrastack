@@ -141,3 +141,10 @@ nginx_ratelimit_burst: 10
 nginx_ratelimit_nodelay: true
 nginx_ratelimit_zone: "default_rlzone"
 nginx_ratelimit_paths: ".*login\\.php|xmlrpc\\.php|wp-cron\\.php"
+
+#
+# PHP Config
+#
+
+# Expected memory usage per PHP pool in MB
+php_proc_mem: 64

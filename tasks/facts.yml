@@ -11,3 +11,8 @@
       nginx_ratelimit_zone is defined and
       nginx_ratelimit_zone | length > 0
       else "nginx_ratelimit_enable" }}
+    php_proc_mem: >-
+      {{ php_proc_mem
+      if php_proc_mem is defined and
+      php_proc_mem > 0
+      else php_proc_mem }}
