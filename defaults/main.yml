@@ -141,6 +141,7 @@ nginx_ratelimit_burst: 10
 nginx_ratelimit_nodelay: true
 nginx_ratelimit_zone: "default_rlzone"
 nginx_ratelimit_paths: ".*login\\.php|xmlrpc\\.php|wp-cron\\.php"
+nginx_cache_bypass_paths: "^(_logged_in_|items_in_cart|jsid|.*/wp-admin|.*/administrator|/admin|/user|/opcache\\.php|.*/phpinfo\\.php|/basket.*|/cart.*|/my-account.*|/checkout.*|/addons.*)"
 
 #
 # PHP Config
