@@ -16,3 +16,9 @@
       if php_proc_mem is defined and
       php_proc_mem > 0
       else php_proc_mem }}
+    children_buffer:
+      {{ children_buffer
+      if children_buffer is defined and
+      children_buffer > 0 and
+      children_buffer < 1
+      else children_buffer }}
