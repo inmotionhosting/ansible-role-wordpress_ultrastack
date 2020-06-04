@@ -148,3 +148,5 @@ nginx_ratelimit_paths: ".*login\\.php|xmlrpc\\.php|wp-cron\\.php"
 
 # Expected memory usage per PHP pool in MB
 php_proc_mem: 64
+# PHP children = server memory / php_proc_mem * children_buffer
+children_buffer: 0.75
