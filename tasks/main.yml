@@ -34,10 +34,14 @@
 - name: (WordPress) Configure httpd mpm module
   template:
     src: etc/httpd/modules.d/00-mpm.conf.j2
-    dest: "{{ apache_modules_path }}/00-mpm.conf"
+    dest: "{{ apache_modules_config_path }}/00-mpm.conf"
     owner: root
     group: root
     mode: "0644"
+  vars:
+    targets:
+      - Debian
+  when: ansible_os_family not in targets
   notify:
     - restart apache
     - restart php-fpm
