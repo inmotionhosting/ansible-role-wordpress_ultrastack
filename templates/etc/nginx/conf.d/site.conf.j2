@@ -11,6 +11,10 @@ server {
 
     server_name {{ site_domain }} www.{{ site_domain }};
 
+    if ($http_cookie ~ "(_logged_in_|items_in_cart|jsid)") {
+        set $cache_bypass 1;
+    }
+
 {% if use_letsencrypt %}
     if ($scheme != "https") {
         return 301 https://$host$request_uri;
@@ -18,10 +22,40 @@ server {
 {% endif %}
 
     location / {
+        add_header X-Proxy-Cache $upstream_cache_status;
 {% if use_letsencrypt %}
         proxy_pass https://localhost:8443;
 {% else %}
         proxy_pass http://localhost:8080;
 {% endif %}
     }
+
+{% if nginx_ratelimit_enable %}
+    location ~ {{ nginx_ratelimit_paths }} {
+        limit_req_status 429;
+        limit_req zone={{ nginx_ratelimit_zone }} burst={{ nginx_ratelimit_burst }}{% if nginx_ratelimit_nodelay %} nodelay{% endif %};
+
+        proxy_no_cache 1;
+        proxy_cache_bypass 1;
+        add_header X-Proxy-Cache $upstream_cache_status;
+
+{% if use_letsencrypt %}
+        proxy_pass https://localhost:8443;
+{% else %}
+        proxy_pass http://localhost:8080;
+{% endif %}
+    }
+{% endif %}
+
+    location ~ {{ nginx_cache_bypass_paths }} {
+        proxy_no_cache 1;
+        proxy_cache_bypass 1;
+        add_header X-Proxy-Cache $upstream_cache_status;
+{% if use_letsencrypt %}
+        proxy_pass https://localhost:8443;
+{% else %}
+        proxy_pass http://localhost:8080;
+{% endif %}
+    }
+
 }

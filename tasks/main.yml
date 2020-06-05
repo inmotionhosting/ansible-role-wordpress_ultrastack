@@ -34,7 +34,7 @@
 - name: (WordPress) Configure httpd mpm module
   template:
     src: etc/httpd/modules.d/00-mpm.conf.j2
-    dest: "{{ apache_modules_path }}/00-mpm.conf"
+    dest: "{{ apache_modules_config_path }}/00-mpm.conf"
     owner: root
     group: root
     mode: "0644"
@@ -60,6 +60,16 @@
     owner: root
     group: root
     mode: "0644"
+  notify:
+    - restart php-fpm
+
+- name: (WordPress) Remove default www pool
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/php/7.0/fpm/pool.d/www.conf
+    - /etc/php-fpm.d/www.conf
   notify:
     - restart php-fpm
 
