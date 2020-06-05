@@ -38,10 +38,6 @@
     owner: root
     group: root
     mode: "0644"
-  vars:
-    targets:
-      - Debian
-  when: ansible_os_family not in targets
   notify:
     - restart apache
     - restart php-fpm

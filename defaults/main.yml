@@ -132,16 +132,11 @@ use_letsencrypt: false
 pass_gen_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
 
 #
-# Nginx Rate Limiting
+# Apache Config
 #
 
-nginx_ratelimit_enable: true
-nginx_ratelimit: 1
-nginx_ratelimit_burst: 10
-nginx_ratelimit_nodelay: true
-nginx_ratelimit_zone: "default_rlzone"
-nginx_ratelimit_paths: ".*login\\.php|xmlrpc\\.php|wp-cron\\.php"
-nginx_cache_bypass_paths: "^(_logged_in_|items_in_cart|jsid|.*/wp-admin|.*/administrator|/admin|/user|/opcache\\.php|.*/phpinfo\\.php|/basket.*|/cart.*|/my-account.*|/checkout.*|/addons.*)"
+# Should be a multiple of 25
+max_request_workers: 250
 
 #
 # PHP Config

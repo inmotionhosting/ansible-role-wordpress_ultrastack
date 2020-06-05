@@ -4,4 +4,17 @@
 # worker MPM: Multi-Processing Module implementing a hybrid
 # multi-threaded multi-process web server
 
+{% if ansible_os_family != "Debian" %}
 LoadModule mpm_worker_module {{ apache_modules_path }}/mod_mpm_worker.so
+{% endif %}
+
+<IfModule mpm_worker_module>
+    ServerLimit               {{ max_request_workers|int / 25 }}
+    StartServers                5
+    MinSpareThreads            75
+    MaxSpareThreads           250
+    ThreadLimit                64
+    ThreadsPerChild            25
+    MaxRequestWorkers	     {{ max_request_workers }}
+    MaxConnectionsPerChild  10000
+</IfModule>
