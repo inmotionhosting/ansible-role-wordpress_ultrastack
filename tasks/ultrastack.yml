@@ -3,9 +3,6 @@
 # Setup
 #
 
-- name: (UltraStack) Include variables and set facts
-  include: facts.yml
-
 - name: (UltraStack) Include UltraStack vars
   include_vars: "ultrastack.yml"
 
