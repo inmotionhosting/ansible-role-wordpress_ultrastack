@@ -46,7 +46,7 @@
   args:
     chdir: "{{ wp_system_path }}"
   become: true
-  become_user: wordpress
+  become_user: "{{ system_user }}"
   register: dbcache
   changed_when: dbcache.stdout != "redis"
   when:
