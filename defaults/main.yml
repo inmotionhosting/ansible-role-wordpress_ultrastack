@@ -144,5 +144,5 @@ max_request_workers: 250
 
 # Expected memory usage per PHP pool in MB
 php_proc_mem: 64
-# PHP children = server memory (MB) / php_proc_mem (MB) * children_buffer
+# PHP memory allocation = server memory (MB) / php_proc_mem (MB) * children_buffer
 children_buffer: 0.75
