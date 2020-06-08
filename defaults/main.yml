@@ -121,7 +121,7 @@ wp_themes: []
 # Meta
 #
 
-# Needs clarification
+# Whether Nginx and Redis should be installed.
 use_ultrastack: false
 
 # Whether a letsencrypt SSL should be generated.
@@ -130,3 +130,19 @@ use_letsencrypt: false
 # Generate a random password.  Used to create a safe password for the
 # WordPress database user via 'wp_db_pass'.
 pass_gen_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+
+#
+# Apache Config
+#
+
+# Should be a multiple of 25
+max_request_workers: 250
+
+#
+# PHP Config
+#
+
+# Expected memory usage per PHP pool in MB
+php_proc_mem: 64
+# PHP memory allocation = server memory (MB) / php_proc_mem (MB) * children_buffer
+children_buffer: 0.75

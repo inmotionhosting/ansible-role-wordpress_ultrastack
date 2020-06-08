@@ -23,7 +23,7 @@ php_value[session.save_path] = /var/lib/php/session
 php_value[soap.wsdl_cache_dir] = /var/lib/php/wsdlcache
 
 pm = ondemand
-pm.max_children = 5
+pm.max_children = {{ (ansible_memtotal_mb / php_proc_mem * children_buffer) | int }}
 pm.max_requests = 200
 pm.process_idle_timeout = 10s
 
