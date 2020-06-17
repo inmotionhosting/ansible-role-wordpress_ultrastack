@@ -1,148 +1,35 @@
 ---
-# defaults file for inmotion.wordpress_ultrastack
-
-#
-# WordPress
-#
-
-# The domain to associate with the WordPress installation.
-site_domain: "{{ ansible_fqdn }}"
-
-# Admin account
-site_email: "email@example.com"
-site_user: "example_username"
-site_pass: "example_password"
-
-# The system user that the WordPress site will belong to.
-system_user: "wordpress"
-
-# The name of the folder in the above user's home directory that
-# WordPress will be installed to.
-wp_system_folder: "doc_root"
-wp_system_path: "/home/{{ system_user }}/{{ wp_system_folder }}"
-
-# These variables control the database name, user, and the user's
-# password that WordPress will use in the wp-config.php file.
-#
-# Note that by default 'wp_db_pass' is automatically generated for you
-# though this may be set to your desired password instead should this
-# be preferred.
-wp_db_name: "{{ system_user }}"
-wp_db_user: "{{ system_user }}"
-# wp_db_pass: 'not_secure'
-
-# WordPress plugins to install and activate
-wp_plugins:
-  - block-bad-queries
-  - boldgrid-backup
-  - health-check
-  - heartbeat-control
-  - w3-total-cache
-
-# W3 Total Cache settings to configure
-wp_w3tc_settings:
-  - setting: pgcache.cache.feed
-    type: boolean
-    value: "true"
-  - setting: pgcache.enabled
-    type: boolean
-    value: "true"
-  - setting: pgcache.engine
-    type: string
-    value: file
-  - setting: browsercache.cssjs.cache.control
-    type: boolean
-    value: "true"
-  - setting: browsercache.cssjs.compression
-    type: boolean
-    value: "true"
-  - setting: browsercache.cssjs.etag
-    type: boolean
-    value: "true"
-  - setting: browsercache.cssjs.expires
-    type: boolean
-    value: "true"
-  - setting: browsercache.cssjs.last_modified
-    type: boolean
-    value: "true"
-  - setting: browsercache.enabled
-    type: boolean
-    value: "true"
-  - setting: browsercache.html.cache.control
-    type: boolean
-    value: "true"
-  - setting: browsercache.html.compression
-    type: boolean
-    value: "true"
-  - setting: browsercache.html.etag
-    type: boolean
-    value: "true"
-  - setting: browsercache.html.expires
-    type: boolean
-    value: "true"
-  - setting: browsercache.html.last_modified
-    type: boolean
-    value: "true"
-  - setting: browsercache.other.cache.control
-    type: boolean
-    value: "true"
-  - setting: browsercache.other.compression
-    type: boolean
-    value: "true"
-  - setting: browsercache.other.etag
-    type: boolean
-    value: "true"
-  - setting: browsercache.other.expires
-    type: boolean
-    value: "true"
-  - setting: browsercache.other.last_modified
-    type: boolean
-    value: "true"
-  - setting: dbcache.enabled
-    type: boolean
-    value: "true"
-  - setting: dbcache.engine
-    type: string
-    value: file
-  - setting: lazyload.enabled
-    type: boolean
-    value: "true"
-  - setting: objectcache.enabled
-    type: boolean
-    value: "true"
-  - setting: objectcache.engine
-    type: string
-    value: file
-
-# WordPress theme(s) to install and activate
-wp_themes: []
-
-#
-# Meta
-#
+# defaults file for inmotion.ultrastack
 
 # Whether Nginx and Redis should be installed.
-use_ultrastack: false
+use_ultrastack: true
+use_redis: true
 
-# Whether a letsencrypt SSL should be generated.
-use_letsencrypt: false
+# default domain if not specified in inventory
+site_domain: "{{ ansible_fqdn }}"
 
-# Generate a random password.  Used to create a safe password for the
-# WordPress database user via 'wp_db_pass'.
-pass_gen_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+ultrastack_w3tc_settings:
+  - setting: dbcache.engine
+    type: string
+    value: redis
+  - setting: dbcache.redis.servers
+    type: array
+    value: "127.0.0.1:6379"
+  - setting: objectcache.engine
+    type: string
+    value: redis
+  - setting: objectcache.redis.servers
+    type: array
+    value: "127.0.0.1:6379"
 
 #
-# Apache Config
+# Nginx Rate Limiting
 #
 
-# Should be a multiple of 25
-max_request_workers: 250
-
-#
-# PHP Config
-#
-
-# Expected memory usage per PHP pool in MB
-php_proc_mem: 64
-# PHP memory allocation = server memory (MB) / php_proc_mem (MB) * children_buffer
-children_buffer: 0.75
+nginx_ratelimit_enable: true
+nginx_ratelimit: 1
+nginx_ratelimit_burst: 10
+nginx_ratelimit_nodelay: true
+nginx_ratelimit_zone: "default_rlzone"
+nginx_ratelimit_paths: ".*login\\.php|xmlrpc\\.php|wp-cron\\.php"
+nginx_cache_bypass_paths: "^(_logged_in_|items_in_cart|jsid|.*/wp-admin|.*/administrator|/admin|/user|/opcache\\.php|.*/phpinfo\\.php|/basket.*|/cart.*|/my-account.*|/checkout.*|/addons.*)"

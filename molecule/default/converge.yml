@@ -5,4 +5,8 @@
     - role: ansible-role-apache
     - role: ansible-role-mysql
     - role: ansible-role-php_fpm
+    - role: ansible-role-letsencrypt
+    - role: ansible-role-wordpress
     - role: ansible-role-wordpress_ultrastack
+      vars:
+        use_ultrastack: true
