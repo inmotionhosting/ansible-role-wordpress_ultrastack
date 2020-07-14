@@ -1,6 +1,9 @@
 ---
-language: python
+os: linux
+arch: amd64
+dist: focal
 services: docker
+language: python
 
 addons:
   apt:
