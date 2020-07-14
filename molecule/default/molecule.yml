@@ -29,5 +29,14 @@ provisioner:
       force-color: true
   log: true
 
+scenario:
+  name: default
+  test_sequence:
+    - syntax
+    - create
+    - converge
+    - idempotence
+    - destroy
+
 verifier:
   name: ansible
