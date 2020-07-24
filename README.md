@@ -66,8 +66,7 @@ Available variables are listed below with their default values (you can also see
 
 ___Note:___ If using the UltraStack optimizations its highly recommended to use the `w3-total-cache` plugin.
 
-Example Playbook
-----------------
+## Example Playbook
 
 ```yaml
 - hosts: wordpress_ultrastack
@@ -83,12 +82,10 @@ Example Playbook
         use_ultrastack: true
 ```
 
-License
--------
+## License
 
 GPLv3
 
-Author Information
-------------------
+## Author Information
 
 [InMotion Hosting](https://inmotionhosting.com)
