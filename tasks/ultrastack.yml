@@ -5,26 +5,25 @@
 # NGINX
 #
 
-- name: (UltraStack) Include Nginx role
+- name: Include Nginx role
   include_role:
     name: inmotionhosting.nginx_proxy
 
-- name: (UltraStack) Configure site-specific NGINX proxy
+- name: Configure site-specific NGINX proxy
   template:
     src: etc/nginx/conf.d/site.conf.j2
     dest: /etc/nginx/conf.d/{{ site_domain }}.conf
     owner: root
     group: root
-    mode: "0644"
-  notify:
-    - restart nginx
+    mode: 0644
+  notify: restart nginx
 
 #
 # Redis
 #
 
 # Redis will be disabled if the host's total memory is <= 1GB
-- name: (UltraStack) Check Memory for Redis inclusion
+- name: Check Memory for Redis inclusion
   set_fact:
     use_redis: false
   when:
@@ -32,7 +31,7 @@
     - use_redis
     - ansible_memtotal_mb <= 1024
 
-- name: (UltraStack) Include Redis role
+- name: Include Redis role
   include_role:
     name: inmotionhosting.redis
   when:
@@ -57,7 +56,7 @@
   when:
     - wp_plugins is defined
     - wp_plugins | length > 0
-    - ("w3-total-cache" in wp_plugins)
+    - "w3-total-cache" in wp_plugins
     - use_redis is defined
     - use_redis
 
@@ -69,6 +68,5 @@
     chdir: "{{ wp_system_path }}"
   become: true
   become_user: "{{ system_user }}"
-  when:
-    - dbcache.changed
+  when: dbcache.changed
   with_items: "{{ ultrastack_w3tc_settings }}"
