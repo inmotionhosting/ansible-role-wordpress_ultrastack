@@ -8,6 +8,7 @@
 - name: Include Nginx role
   include_role:
     name: inmotionhosting.nginx_proxy
+    public: yes
 
 - name: Configure site-specific NGINX proxy
   template:
@@ -34,6 +35,7 @@
 - name: Include Redis role
   include_role:
     name: inmotionhosting.redis
+    public: yes
   when:
     - use_redis is defined
     - use_redis
@@ -56,7 +58,7 @@
   when:
     - wp_plugins is defined
     - wp_plugins | length > 0
-    - "w3-total-cache" in wp_plugins
+    - ("w3-total-cache" in wp_plugins)
     - use_redis is defined
     - use_redis
 
