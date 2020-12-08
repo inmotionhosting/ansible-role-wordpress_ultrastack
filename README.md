@@ -19,6 +19,8 @@ Modular Ansible Role for deploying and configuring WordPress featuring InMotion'
 - role: inmotionhosting.mysql
 - role: inmotionhosting.php_fpm
 - role: inmotionhosting.wordpress
+- collection: community.general
+- collection: ansible.posix
 ```
 
 ### Optional

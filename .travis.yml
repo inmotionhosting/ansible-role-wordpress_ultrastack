@@ -32,6 +32,7 @@ install:
   - git clone $GIT_BASE/ansible-role-wordpress $ROLE_DIR/ansible-role-wordpress
   - git clone $GIT_BASE/ansible-role-nginx_proxy $ROLE_DIR/inmotionhosting.nginx_proxy
   - git clone $GIT_BASE/ansible-role-redis $ROLE_DIR/inmotionhosting.redis
+  - ansible-galaxy collection install community.general ansible.posix
 
 script:
   - molecule test
