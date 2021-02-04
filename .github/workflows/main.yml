@@ -1,0 +1,57 @@
+name: Ansible-Role-WordPress_Ultrastack CI Testing
+
+on: 
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs: 
+  test:
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_distro: [ centos-7, centos-8, debian-9, debian-10, ubuntu-18.04, ubuntu-20.04 ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-apache
+          path: ./ansible-role-apache
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-mysql
+          path: ./ansible-role-mysql
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-php_fpm
+          path: ./ansible-role-php_fpm
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-letsencrypt
+          path: ./ansible-role-letsencrypt
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-wordpress
+          path: ./ansible-role-wordpress
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-nginx_proxy
+          path: ./ansible-role-inmotionhosting.nginx_proxy
+      - uses: actions/checkout@v2
+        with:
+          repository: inmotionhosting/ansible-role-redis
+          path: ./ansible-role-inmotionhosting.redis
+      - name: Setup Python3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Pip install Repo Requirements
+        run: pip install -r requirements.txt
+      - name: Ansible Galaxy install Community collection
+        run: ansible-galaxy collection install community.general ansible.posix
+      - name: Molecule Test
+        run: molecule test
+        env:
+          MOLECULE_DISTRO: ${{ matrix.molecule_distro }}
