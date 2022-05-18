@@ -9,6 +9,21 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/{{ site_domain }}/privkey.pem;
 {% endif %}
 
+{% if nginx_brotli_enable %}
+    brotli_static           on;
+    brotli                  on;
+    brotli_comp_level       {{ nginx_brotli_comp_level }};
+    brotli_types            application/javascript
+                            application/json
+                            application/x-javascript
+                            application/xml
+                            application/xml+rss
+                            text/css
+                            text/javascript
+                            text/plain
+                            text/xml;
+{% endif %}
+
     server_name {{ site_domain }} www.{{ site_domain }};
 
     if ($http_cookie ~ "(_logged_in_|items_in_cart|jsid)") {
@@ -57,5 +72,13 @@ server {
         proxy_pass http://localhost:8080;
 {% endif %}
     }
+
+{% if nginx_cache_purge_enable %}
+    location ~ ^/purge(/.*) {
+        allow 127.0.0.1;
+        deny all;
+        proxy_cache_purge sitecache "$scheme$request_method$host$1";
+    }
+{% endif %}
 
 }
