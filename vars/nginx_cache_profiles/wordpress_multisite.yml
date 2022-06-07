@@ -1,0 +1,8 @@
+nginx_accel_static_content: false
+nginx_cache_convert_head: true
+nginx_cache_honor_cc: false
+nginx_cache_honor_cookies: true
+nginx_cache_honor_expires: false
+nginx_cache_time_default: 14400
+nginx_proxy_cache_enable: true
+nginx_ratelimit_enable: true

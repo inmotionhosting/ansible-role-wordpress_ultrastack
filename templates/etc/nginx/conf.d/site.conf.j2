@@ -38,12 +38,24 @@ server {
 
     location / {
         add_header X-Proxy-Cache $upstream_cache_status;
+{% if not nginx_proxy_cache_enable %}
+        proxy_no_cache 1;
+        proxy_cache_bypass 1;
+{% endif %}
 {% if use_letsencrypt is defined and use_letsencrypt %}
         proxy_pass https://localhost:8443;
 {% else %}
         proxy_pass http://localhost:8080;
 {% endif %}
     }
+
+{% if nginx_accel_static_content %}
+    location ~* \.(ico|jpe?g|gif|png|bmp|svg|tiff|exe|dmg|zip|rar|7z|docx?|xlsx?|js|css|less|sass|scss|ttf|woff2?|mp3|mp4|mkv|avi|mov|mpe?g|aac|wav|flac)$ {
+        expires 7d;
+        add_header Cache-Control "public, must-revalidate";
+        add_header X-Proxy-Cache "STATIC/TYPE";
+    }
+{% endif %}
 
 {% if nginx_ratelimit_enable %}
     location ~ {{ nginx_ratelimit_paths }} {

@@ -10,6 +10,11 @@
     name: inmotionhosting.nginx_proxy
     public: yes
 
+- name: Load in profile variables for selected nginx cache profile
+  include_vars:
+    file: vars/nginx_cache_profiles/{{ nginx_cache_profile }}.yml
+  tags: profile
+
 - name: Configure site-specific NGINX proxy
   template:
     src: etc/nginx/conf.d/site.conf.j2
@@ -18,6 +23,7 @@
     group: root
     mode: 0644
   notify: restart nginx
+  tags: profile
 
 #
 # Redis
