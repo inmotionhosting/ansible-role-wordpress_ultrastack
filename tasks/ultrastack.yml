@@ -25,6 +25,18 @@
   notify: restart nginx
   tags: profile
 
+- name: Configure NGINX VTS module
+  template:
+    src: etc/nginx/conf.d/status.conf.j2
+    dest: /etc/nginx/conf.d/status.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  when:
+    - nginx_vts_enable is defined
+    - nginx_vts_enable
+
 #
 # Redis
 #

@@ -1,0 +1,17 @@
+# {{ template_destpath }}
+# {{ ansible_managed }}
+
+vhost_traffic_status on;
+vhost_traffic_status_zone shared:vts_zone:16m;
+
+server {
+
+    listen unix:/var/run/nginx_status.sock;
+
+    location /vstatus {
+        access_log off;
+        vhost_traffic_status_display;
+        vhost_traffic_status_display_format json;
+    }
+
+}
