@@ -44,3 +44,8 @@ nginx_cache_purge_enable: false
 #
 nginx_brotli_enable: false
 nginx_brotli_comp_level: 4
+
+#
+# Nginx Cache Profile
+#
+nginx_cache_profile: wordpress

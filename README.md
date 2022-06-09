@@ -69,6 +69,7 @@ Available variables are listed below with their default values (you can also see
 | nginx_brotli_enable | Switch to enable brotli compression configuration using ngx_brotli module
 | nginx_brotli_comp_level | Brotli compression level (1-9)
 | nginx_vts_enable | Switch to enable NGINX Configuration for vts module
+| nginx_cache_profile | Load a pre-configured NGINX Cache Profile
 
 ___Note:___ If using the UltraStack optimizations its highly recommended to use the `w3-total-cache` plugin.
 
