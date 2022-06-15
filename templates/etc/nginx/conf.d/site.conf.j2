@@ -90,6 +90,7 @@ server {
 {% if nginx_cache_purge_enable %}
     location ~ ^/purge(/.*) {
         allow 127.0.0.1;
+        allow {{ ansible_default_ipv4.address }};
         deny all;
         proxy_cache_purge sitecache "$scheme$request_method$host$1";
     }
