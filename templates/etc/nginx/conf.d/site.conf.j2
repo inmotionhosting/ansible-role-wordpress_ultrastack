@@ -26,6 +26,8 @@ server {
 
     server_name {{ site_domain }} www.{{ site_domain }};
 
+    root {{ wp_system_path }};
+    
     if ($http_cookie ~ "(_logged_in_|items_in_cart|jsid)") {
         set $cache_bypass 1;
     }

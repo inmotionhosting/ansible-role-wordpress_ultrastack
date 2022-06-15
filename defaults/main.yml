@@ -49,3 +49,11 @@ nginx_brotli_comp_level: 4
 # Nginx Cache Profile
 #
 nginx_cache_profile: wordpress
+
+# The system user that the WordPress site will belong to.
+system_user: "wordpress"
+
+# The name of the folder in the above user's home directory that
+# WordPress will be installed to.
+wp_system_folder: "doc_root"
+wp_system_path: "/home/{{ system_user }}/{{ wp_system_folder }}"
