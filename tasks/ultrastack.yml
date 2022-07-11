@@ -9,6 +9,7 @@
   include_role:
     name: inmotionhosting.nginx_proxy
     public: yes
+  tags: profile
 
 - name: Load in profile variables for selected nginx cache profile
   include_vars:
