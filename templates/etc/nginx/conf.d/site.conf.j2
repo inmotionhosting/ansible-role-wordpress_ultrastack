@@ -43,6 +43,9 @@ server {
 {% if not nginx_proxy_cache_enable %}
         proxy_no_cache 1;
         proxy_cache_bypass 1;
+{% else %}
+        proxy_no_cache $cache_bypass;
+        proxy_cache_bypass $cache_bypass;
 {% endif %}
 {% if use_letsencrypt is defined and use_letsencrypt %}
         proxy_pass https://localhost:8443;
