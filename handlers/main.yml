@@ -3,5 +3,5 @@
 
 - name: restart nginx
   service:
-    name: "{{ nginx_daemon }}"
+    name: nginx
     state: restarted
