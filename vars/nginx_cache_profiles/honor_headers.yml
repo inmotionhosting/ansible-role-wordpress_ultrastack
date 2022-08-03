@@ -1,4 +1,4 @@
-nginx_accel_static_content: true
+nginx_accel_static_content: false
 nginx_cache_convert_head: true
 nginx_cache_honor_cc: true
 nginx_cache_honor_cookies: true
