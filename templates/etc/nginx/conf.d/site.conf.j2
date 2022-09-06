@@ -1,6 +1,15 @@
 # {{ template_destpath }}
 # {{ ansible_managed }}
 
+upstream http_backend {
+{% if use_letsencrypt is defined and use_letsencrypt %}
+    server localhost:8443;
+{% else %}
+    server localhost:8080;
+{% endif %}    
+    keepalive 2;
+}
+
 server {
     listen 80;
 {% if use_letsencrypt is defined and use_letsencrypt %}
@@ -40,6 +49,11 @@ server {
 
     location / {
         add_header X-Proxy-Cache $upstream_cache_status;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;        
 {% if not nginx_proxy_cache_enable %}
         proxy_no_cache 1;
         proxy_cache_bypass 1;
@@ -48,10 +62,12 @@ server {
         proxy_cache_bypass $cache_bypass;
 {% endif %}
 {% if use_letsencrypt is defined and use_letsencrypt %}
-        proxy_pass https://localhost:8443;
+        proxy_pass https://http_backend;
 {% else %}
-        proxy_pass http://localhost:8080;
+        proxy_pass http://http_backend;
 {% endif %}
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
     }
 
 {% if nginx_accel_static_content %}
@@ -71,11 +87,18 @@ server {
         proxy_cache_bypass 1;
         add_header X-Proxy-Cache $upstream_cache_status;
 
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;        
+
 {% if use_letsencrypt is defined and use_letsencrypt %}
-        proxy_pass https://localhost:8443;
+        proxy_pass https://http_backend;
 {% else %}
-        proxy_pass http://localhost:8080;
+        proxy_pass http://http_backend;
 {% endif %}
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
     }
 {% endif %}
 
@@ -83,11 +106,18 @@ server {
         proxy_no_cache 1;
         proxy_cache_bypass 1;
         add_header X-Proxy-Cache $upstream_cache_status;
+        
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;        
 {% if use_letsencrypt is defined and use_letsencrypt %}
-        proxy_pass https://localhost:8443;
+        proxy_pass https://http_backend;
 {% else %}
-        proxy_pass http://localhost:8080;
+        proxy_pass http://http_backend;
 {% endif %}
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
     }
 
 {% if nginx_cache_purge_enable %}
