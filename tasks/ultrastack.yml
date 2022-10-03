@@ -38,6 +38,21 @@
     - nginx_vts_enable is defined
     - nginx_vts_enable
 
+- name: Identify extra site configs
+  ansible.builtin.find:
+    paths: /etc/nginx/conf.d
+    file_type: file
+    contains: '.*site\.conf\.j2.*'
+    excludes: "{{ site_domain }}.conf"
+  register: nginx_extra_sites
+
+- name: Remove extra site configs
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ nginx_extra_sites.files }}"
+  notify: restart nginx
+
 #
 # Redis
 #
