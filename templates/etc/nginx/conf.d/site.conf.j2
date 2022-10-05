@@ -1,5 +1,7 @@
 # {{ template_destpath }}
 # {{ ansible_managed }}
+# tags: site.conf.j2
+
 
 upstream http_backend {
 {% if use_letsencrypt is defined and use_letsencrypt %}
