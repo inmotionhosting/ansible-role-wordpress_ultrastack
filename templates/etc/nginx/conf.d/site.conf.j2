@@ -63,7 +63,7 @@ server {
         proxy_no_cache $cache_bypass;
         proxy_cache_bypass $cache_bypass;
 {% endif %}
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
         proxy_pass https://http_backend;
 {% else %}
         proxy_pass http://http_backend;
@@ -94,7 +94,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;        
 
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
         proxy_pass https://http_backend;
 {% else %}
         proxy_pass http://http_backend;
@@ -113,7 +113,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;        
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
         proxy_pass https://http_backend;
 {% else %}
         proxy_pass http://http_backend;
