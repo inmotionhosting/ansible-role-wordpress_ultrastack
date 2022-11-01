@@ -4,7 +4,7 @@
 
 
 upstream http_backend {
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
     server localhost:8443;
 {% else %}
     server localhost:8080;
@@ -14,7 +14,7 @@ upstream http_backend {
 
 server {
     listen 80;
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
     listen 443 ssl http2;
     ssl_certificate     /etc/letsencrypt/live/{{ site_domain }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ site_domain }}/privkey.pem;
@@ -43,7 +43,7 @@ server {
         set $cache_bypass 1;
     }
 
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
     if ($scheme != "https") {
         return 301 https://$host$request_uri;
     }
@@ -63,7 +63,7 @@ server {
         proxy_no_cache $cache_bypass;
         proxy_cache_bypass $cache_bypass;
 {% endif %}
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
         proxy_pass https://http_backend;
 {% else %}
         proxy_pass http://http_backend;
@@ -94,7 +94,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;        
 
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
         proxy_pass https://http_backend;
 {% else %}
         proxy_pass http://http_backend;
@@ -113,7 +113,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;        
-{% if use_letsencrypt is defined and use_letsencrypt %}
+{% if use_letsencrypt is defined and use_letsencrypt|bool %}
         proxy_pass https://http_backend;
 {% else %}
         proxy_pass http://http_backend;
