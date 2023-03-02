@@ -95,6 +95,7 @@
     - ("w3-total-cache" in wp_plugins)
     - use_redis is defined
     - use_redis
+    - install_wordpress | bool
 
 - name: (WordPress) Configure W3TC for Redis
   command: >-

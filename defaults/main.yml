@@ -57,3 +57,6 @@ system_user: "wordpress"
 # WordPress will be installed to.
 wp_system_folder: "doc_root"
 wp_system_path: "/home/{{ system_user }}/{{ wp_system_folder }}"
+
+# metavar that helps control some tasks that should not run
+install_wordpress: true
