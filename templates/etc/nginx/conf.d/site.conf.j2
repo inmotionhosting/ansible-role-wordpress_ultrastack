@@ -5,9 +5,9 @@
 
 upstream http_backend {
 {% if use_letsencrypt is defined and use_letsencrypt|bool %}
-    server localhost:8443;
+    server 127.0.0.1:8443;
 {% else %}
-    server localhost:8080;
+    server 127.0.0.1:8080;
 {% endif %}    
     keepalive 2;
 }
