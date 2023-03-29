@@ -40,12 +40,6 @@ nginx_cache_bypass_paths: "^(_logged_in_|items_in_cart|jsid|.*/wp-admin|.*/admin
 nginx_cache_purge_enable: false
 
 #
-# Nginx Brotli Configuration
-#
-nginx_brotli_enable: false
-nginx_brotli_comp_level: 4
-
-#
 # Nginx Cache Profile
 #
 nginx_cache_profile: no_caching

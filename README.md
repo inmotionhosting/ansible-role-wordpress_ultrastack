@@ -66,8 +66,6 @@ Available variables are listed below with their default values (you can also see
 | nginx_ratelimit_paths | Regex paths to rate limit
 | nginx_cache_bypass_paths | Regex paths on which to enable cache bypass
 | nginx_cache_purge_enable | Switch to enable location block to purge cache using ngx_cache_purge modulle
-| nginx_brotli_enable | Switch to enable brotli compression configuration using ngx_brotli module
-| nginx_brotli_comp_level | Brotli compression level (1-9)
 | nginx_vts_enable | Switch to enable NGINX Configuration for vts module
 | nginx_cache_profile | Load a pre-configured NGINX Cache Profile
 
