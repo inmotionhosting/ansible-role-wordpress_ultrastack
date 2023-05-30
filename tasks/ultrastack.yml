@@ -53,6 +53,10 @@
   with_items: "{{ nginx_extra_sites.files }}"
   notify: restart nginx
 
+- name: Reload nginx
+  changed_when: true
+  notify: restart nginx
+
 #
 # Redis
 #
