@@ -16,6 +16,15 @@
     file: vars/nginx_cache_profiles/{{ nginx_cache_profile }}.yml
   tags: profile
 
+- name: Configure upstream server groups
+  template:
+    src: etc/nginx/conf.d/upstream.conf.j2
+    dest: /etc/nginx/conf.d/upstream.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+
 - name: Configure site-specific NGINX proxy
   template:
     src: etc/nginx/conf.d/site.conf.j2
