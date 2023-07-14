@@ -54,3 +54,7 @@ wp_system_path: "/home/{{ system_user }}/{{ wp_system_folder }}"
 
 # metavar that helps control some tasks that should not run
 install_wordpress: true
+
+# site config conf files matching these patterns will not be removed from /etc/nginx/conf.d/
+preserve_site_config_patterns:
+  - "{{ site_domain }}.conf"
