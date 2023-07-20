@@ -3,15 +3,6 @@
 # tags: site.conf.j2
 
 
-upstream http_backend {
-{% if use_letsencrypt is defined and use_letsencrypt|bool %}
-    server 127.0.0.1:8443;
-{% else %}
-    server 127.0.0.1:8080;
-{% endif %}    
-    keepalive 2;
-}
-
 server {
     listen 80;
 {% if use_letsencrypt is defined and use_letsencrypt|bool %}
